@@ -1,0 +1,24 @@
+# Parameters for the single-axis driver.
+#
+# counts_per_rev is the figure you must get right before any number this node
+# reports means anything. For a quadrature encoder it is:
+#     counts_per_rev = encoder_PPR * 4 * gear_ratio
+# The 4 is x4 decoding (both edges of both channels). Verify it empirically:
+# home the axis, command exactly one revolution, and check the output shaft
+# actually turned once. If it did not, your number is wrong, not the motor.
+
+axis_driver:
+  ros__parameters:
+    port: /dev/ttyUSB0
+    baud: 115200
+    joint_name: axis_1
+    counts_per_rev: 1200
+    publish_rate_hz: 50.0
+    mock: false
+
+    # Starting gains. Tune in this order: raise kp until the axis oscillates,
+    # back off to about half, add kd to damp the overshoot, then add just
+    # enough ki to remove the steady-state error that stiction leaves behind.
+    kp: 4.0
+    ki: 0.5
+    kd: 0.12
